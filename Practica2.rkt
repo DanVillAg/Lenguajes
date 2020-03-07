@@ -33,7 +33,14 @@
 
 ;;Funcion que recibe una figura y calcula su perimetro.
 ;;perimetro: Figura -> number
-;;(define (perimetro figura))
+(define (perimetro figura)
+  (type-case Figura figura
+    [Circulo (r) (* (* 2 r) pi)]
+    [Cuadrado (l) (* 4 l)]
+    [Rectangulo (b a) (+ (* 2 b) (* 2 a))]
+    [Triangulo (b a ) (* 3 b)]
+      )
+  )
 
 ;;Funcion que recibe un numero, un arbol binario y agrega el elemento al
 ;;arbol de busqueda binario.

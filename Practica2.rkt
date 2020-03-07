@@ -42,6 +42,18 @@
       )
   )
 
+;;Funcion que recibe una figura y calcula su area.
+;;area: Figura -> number
+(define (area figura)
+  (type-case Figura figura
+    [Circulo (r) (* pi (potencia r 2))]
+    [Cuadrado (l) (* l l)]
+    [Rectangulo (b a) (* b a)]
+    [Triangulo (b a) (/ (* b a) 2)]
+      )
+  )
+
+
 ;;Funcion que recibe un numero, un arbol binario y agrega el elemento al
 ;;arbol de busqueda binario.
 ;;agrega: number ABB -> number
@@ -57,3 +69,15 @@
 ;;falso en otro caso.
 ;;contiene: ABB ->  number -> boolean
 ;;(define (contiene arbol e))
+
+;;Funciones Auxiliares:
+
+;;Funcion que eleva el numero a, a la potencia b
+;; potencia: number number
+(define (potencia a b)
+  (cond
+    [(and (equal? a 0) (< b 0))  (error 'err "0 con exponente negativo no esta definido")]
+    [(equal? b 0) 1]
+    [(> b 0) (* a (potencia a (sub1 b)))]
+    [(< b 0) (* (/ 1 a) (potencia a (add1 b)))]
+))

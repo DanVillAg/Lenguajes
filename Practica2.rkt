@@ -24,6 +24,7 @@
 ;;multiplos: number number -> (listof number)
 ;;(define (multiplos n r))
 
+;;Definicion del tipo Figura
 (define-type Figura
   [Circulo    (radio number?)]
   [Cuadrado   (lado  number?)]
@@ -53,12 +54,23 @@
       )
   )
 
+;;Definicion del tipo ABB
+(define-type ABB
+  [vacio]
+  [hoja (e number?)]
+  [nodo (e number?) (izq ABB?) (der ABB?)]
+  )
 
 ;;Funcion que recibe un numero, un arbol binario y agrega el elemento al
 ;;arbol de busqueda binario.
 ;;agrega: number ABB -> number
-;;(define (agrega n arbol))
-
+(define (agrega n arbol)
+  (type-case ABB arbol
+    [vacio () (hoja n)]
+    [hoja (e) (nodo e vacio (hoja n))]
+    [nodo (e i d) (vacio)]
+  )
+)
 
 ;;Funcion que recibe un arbol binario y calcula su altura.
 ;;altura: ABB -> number

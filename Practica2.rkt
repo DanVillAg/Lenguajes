@@ -6,8 +6,19 @@
 ;;Funcion que recibe una lista y devuelve el producto cruz de los
 ;;elementos de dicha lista, consigo misma.
 ;;conjunto-cuardado: (listof number) -> (listof (pairof number))
-;;(define (conjunto-cuadrado lista))
 
+(define (conjunto-cuadrado lista)
+  (remove-duplicates (filter (λ (x) (not (empty? x))) (conjunto-aux1 lista lista)))
+  )
+
+
+(define (conjunto-aux1 lista lis)
+  (let ([cart
+  (for/list ([i lista])
+     (if (empty? lis) '()   (list (car lis) i))
+    )]) (if (empty? lis) (append cart '())  (append cart  (conjunto-aux1 lista (cdr lis))))
+    )
+  )
 
 ;;Funcion que calcula el cambio que tenemos que devolver segun el
 ;;monto a cobrar y el monto pagado. Devuevel la cantidad de monedas de las

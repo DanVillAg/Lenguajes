@@ -54,7 +54,7 @@
 ;;Funcion que recibe n, r y devuelve el conjunto de multiplos n,
 ;;en el rango n y r.
 ;;multiplos: number number -> (listof number)
-(define (multiplos n r) (filter (λ (x) (not (zero? x)))  (for/list ([i r]) (* i n))     ) )
+(define (multiplos n r) (filter (λ (x) (< x r)) ) (filter (λ (x) (not (zero? x)))  (for/list ([i r]) (* i n)))) )
 
 ;;Definicion del tipo Figura
 (define-type Figura

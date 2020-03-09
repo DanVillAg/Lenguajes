@@ -28,7 +28,28 @@
 
 ;;Funcion que calcula la descomposicion en factores primos de un numero
 ;;descomposicion-primos: number -> (listof (pairof number))
-;;(define (descomposicion-primos n))
+(define (descomposicion-primos n)
+  (empareja (factores n '() 2 n))
+ )
+
+(define (empareja lista)
+  (let ([x (longitud (filter (λ (n)(equal? (car lista) n)) lista))])
+    (if (empty? lista) '()
+        (append (list (list (car lista) x)) (empareja (filter (λ (n) (not (equal? n (car lista)))) lista)) ))
+  )
+)
+(define (factores n lista ld i)
+  (cond
+   [(equal? n 1) lista]
+   [(> ld i) (append lista (list i))]
+   [(divisor? 2 n) (factores (/ n 2) (append lista '(2)) 2 i)]
+   [(divisor? 3 n) (factores (/ n 3) (append lista '(3)) 3 i)]
+   [else (if (equal? (modulo n (+ 2 ld)) 0)
+         (factores (/ n (+ 2 ld)) (append lista (list (+ 2 ld))) ld i)
+         (factores n lista (+ 2 ld) i))]
+   )
+  )
+  
 
 ;;Funcion que recibe n, r y devuelve el conjunto de multiplos n,
 ;;en el rango n y r.
@@ -104,3 +125,22 @@
     [(> b 0) (* a (potencia a (sub1 b)))]
     [(< b 0) (* (/ 1 a) (potencia a (add1 b)))]
 ))
+
+
+
+
+;;Predicado que nos dice si un numero m es divisor de otro numero n
+;;divisor?: number number -> number
+(define (divisor? m n)
+  (cond
+    [(and (equal? n 0)(equal? m 0)) error 'bad "No se puede dividir 0 entre 0 :v"]
+    [(equal? n 0) #t]
+    [(integer? (/ n m)) #t]
+    [(not (integer? (/ n m))) #f]
+  ))
+
+;;Funcion que nos da la longitud de una lista
+;; longitud: (listof a) -> number
+(define (longitud lista)
+  (if (null? lista) 0 (+ 1 (longitud (cdr lista))))
+  )

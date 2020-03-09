@@ -54,7 +54,7 @@
 ;;Funcion que recibe n, r y devuelve el conjunto de multiplos n,
 ;;en el rango n y r.
 ;;multiplos: number number -> (listof number)
-(define (multiplos n r) (filter (λ (x) (< x r)) ) (filter (λ (x) (not (zero? x)))  (for/list ([i r]) (* i n)))) )
+(define (multiplos n r) (filter (λ (x) (< x r)) (filter (λ (x) (not (zero? x)))  (for/list ([i r]) (* i n)))) )
 
 ;;Definicion del tipo Figura
 (define-type Figura
@@ -99,20 +99,32 @@
 (define (agrega n arbol)
   (type-case ABB arbol
     [vacio () (hoja n)]
-    [hoja (e) (nodo e vacio (hoja n))]
-    [nodo (e i d) (vacio)]
+    [hoja (e) (if (< n e) (nodo e (hoja n) (vacio)) (nodo e (vacio) (hoja n)))]
+    [nodo (e i d) (if (< n e) (nodo (agrega n i) d) (nodo e i (agrega n d)) )]
   )
 )
 
 ;;Funcion que recibe un arbol binario y calcula su altura.
 ;;altura: ABB -> number
-;;(define (altura arbol))
+(define (altura arbol)
+  (type-case ABB arbol
+    [vacio () 0]
+    [hoja (e) 1]
+    [nodo (e i d) (+ 1 (max (altura i) (altura d)) )]
+    )
+  )
 
 ;;Funcion que recibe un arbol binario, un elemento y
 ;;devuelve verdadero si el elemento esta contenido en el arbol,
 ;;falso en otro caso.
 ;;contiene: ABB ->  number -> boolean
-;;(define (contiene arbol e))
+(define (contiene arbol e)
+  (type-case ABB arbol
+    [vacio () (#f)]
+    [hoja (n) (equal? e n)]
+    [nodo (n i d) (if (< e n) (contiene i e) (if (equal? e n) #t (contiene d e)))]
+  )
+ )
 
 ;;Funciones Auxiliares:
 

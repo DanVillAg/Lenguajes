@@ -24,7 +24,13 @@
 ;;monto a cobrar y el monto pagado. Devuevel la cantidad de monedas de las
 ;;denominaciones $50, $20,  $10, $5, $2, $1.
 ;;area-cono: number number -> (number number number number number number)
-;;(define (cambio total pago))
+(define (cambio total pago)
+  (list (quotient(- pago total) 50) (quotient (remainder(- pago total) 50) 20)
+                                     (quotient (remainder (remainder(- pago total) 50) 20) 10)
+                                     (quotient (remainder (remainder (remainder(- pago total) 50) 20) 10) 5)
+                                     (quotient (remainder (remainder (remainder (remainder(- pago total) 50) 20) 10) 5) 2)
+                                     (quotient (remainder (remainder (remainder (remainder (remainder(- pago total) 50) 20) 10) 5) 2) 1)
+                                     ))
 
 ;;Funcion que calcula la descomposicion en factores primos de un numero
 ;;descomposicion-primos: number -> (listof (pairof number))

@@ -23,10 +23,10 @@
        [(add1) (op add1 (list (parse (second sexp)))) ]
        [(sub1) (op sub1 (list (parse (second sexp)))) ]
        [(with) (with (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
+       [(with*) (with* (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
        )]
     ))
 
-;;(with (list (binding 'a (num 3)) (binding 'c (num 7))) (id 'a))
-(for/list ((i (second '{with {{a 2} {b 3}} {+ a b}})))
-  (binding (first i) (parse (second i))))
+;;Ejemplo de un with bien construido: (with (list (binding 'a (num 3)) (binding 'c (num 7))) (id 'a))
+
 

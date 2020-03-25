@@ -6,7 +6,14 @@
 ;; un id (sub-id) y otra expresión (value).
 ;; Sustituye el valor sub-id por value, en expr.
 ;; subst: WAE symbol WAE -> WAE
-;;(define (subst expr sub-id value) ...)
+(define (subst expr sub-id value)
+  (type-case WAE expr
+    [id (i) (if (symbol=? i sub-id ) value expr)]
+    [num (n) expr ]
+    [op (f l) (op f (for/list ((i l)) (subst i sub-id value)))]
+    [with (bind body) 2]
+    [with* (bind body) 3]
+    ))
 
 
 ;; Toma un árbol de sintáxis abstraca del lenguaje WAE

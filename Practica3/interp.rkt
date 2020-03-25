@@ -11,7 +11,7 @@
     [id (i) (if (symbol=? i sub-id ) value expr)]
     [num (n) expr ]
     [op (f l) (op f (for/list ((i l)) (subst i sub-id value)))]
-    [with (bind body) (with bind  (if [member sub-id (map binding-id bind)] body (subst body sub-id value)))]
+    [with  (bind body) (with bind   (if [member sub-id (map binding-id bind)] body (subst body sub-id value)))]
     [with* (bind body) (with* bind  (if [member sub-id (map binding-id bind)] body (subst body sub-id value)))]
     ))
 
@@ -22,7 +22,7 @@
 (define (interp expr)
   (type-case WAE expr
     [id (i) (error 'interp "Identificador libre >:")]
-    [num (n) n]
+    [num (n) expr]
     [op (f l)
         (cond
           [(equal? + f) (foldr + 0 (map (λ (expr) (interp expr)) l))]
@@ -34,9 +34,12 @@
           [(equal? add1 f) (add1 (interp (first l)))]
           [(equal? sub1 f) (sub1 (interp (first l)))]
           )]
-    [with (bind body) 2]
+    [with  (bind body) (2)]
     [with* (bind body) 3]
     ))
 ;;(foldr + 0 (map (λ (expr) (interp expr)) l))
 ;;Ejemplo (foldr + 0 (map (λ (expr) (interp expr)) (list (num 1) (num 2) (num 3))))
-;;Ehemplo (interp (op + (list (num 1) (num 2) (num 3))))
+;;Ejemplo (interp (op + (list (num 1) (num 2) (num 3))))
+;;Ejemplo (subst (parse '{with {{a 2} {b 3}} {+ b c 3}}) 'c (num 7))
+
+

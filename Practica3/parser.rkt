@@ -25,6 +25,7 @@
        [(with) (with (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
        [(with*) (with* (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
        )]
+    [else (error "Error de Sintaxis")]
     ))
 
 ;;Ejemplo de un with bien construido: (with (list (binding 'a (num 3)) (binding 'c (num 7))) (id 'a))

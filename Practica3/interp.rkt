@@ -22,7 +22,7 @@
 (define (interp expr)
   (type-case WAE expr
     [id (i) (error 'interp "Identificador libre >:")]
-    [num (n) expr]
+    [num (n) n]
     [op (f l)
         (cond
           [(equal? + f) (foldr + 0 (map (λ (expr) (interp expr)) l))]

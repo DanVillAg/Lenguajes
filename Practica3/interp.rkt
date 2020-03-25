@@ -34,9 +34,13 @@
           [(equal? add1 f) (add1 (interp (first l)))]
           [(equal? sub1 f) (sub1 (interp (first l)))]
           )]
-    [with  (bind body) (2)]
-    [with* (bind body) 3]
+    [with  (bind body) (interp (interp-aux bind body))]
+    [with* (bind body) (interp (interp-aux bind body))]
     ))
+(define (interp-aux bind body)
+  (if (empty? bind) body (interp-aux (cdr bind) (subst body (binding-id (car bind)) (binding-value (car bind))))))
+
+
 ;;(foldr + 0 (map (λ (expr) (interp expr)) l))
 ;;Ejemplo (foldr + 0 (map (λ (expr) (interp expr)) (list (num 1) (num 2) (num 3))))
 ;;Ejemplo (interp (op + (list (num 1) (num 2) (num 3))))

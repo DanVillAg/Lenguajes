@@ -25,9 +25,9 @@
     [num (n) n]
     [op (f l)
         (cond
-          [(equal? + f) (foldr + 0 (map (λ (expr) (interp expr)) l))]
-          ;;[(equal? - f) (foldl - 0 (map (λ (expr) (interp expr)) l))]
-          [(equal? * f) (foldl * 1 (map (λ (expr) (interp expr)) l))]
+          [(equal? + f) (foldr + 0 (map (λ (expr) (interp expr)) l))] ;;(map (λ (expr) (interp expr)) l) Genera lista
+          ;;[(equal? - f) (foldl - 0 (map (λ (expr) (interp expr)) l))] ;; por ejemplo (list (num 2) (num 3) (num 4) ->
+          [(equal? * f) (foldl * 1 (map (λ (expr) (interp expr)) l))]    ;; es igual a  (list 2 3 4)
           ;;[(equal? / f) (foldr / 0 (map (λ (expr) (interp expr)) l))]
           [(equal? modulo f) (modulo (interp (first l)) (interp (second l)))]
           [(equal? expt f) (expt (interp (first l)) (interp (second l)))]

@@ -11,8 +11,8 @@
     [id (i) (if (symbol=? i sub-id ) value expr)]
     [num (n) expr ]
     [op (f l) (op f (for/list ((i l)) (subst i sub-id value)))]
-    [with (bind body) 2]
-    [with* (bind body) 3]
+    [with (bind body) (with bind  (if [member sub-id (map binding-id bind)] body (subst body sub-id value)))]
+    [with* (bind body) (with* bind  (if [member sub-id (map binding-id bind)] body (subst body sub-id value)))]
     ))
 
 

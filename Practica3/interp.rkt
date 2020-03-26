@@ -26,9 +26,9 @@
     [op (f l)
         (cond
           [(equal? + f) (foldr + 0 (map (λ (expr) (interp expr)) l))] ;;(map (λ (expr) (interp expr)) l) Genera lista
-          ;;[(equal? - f) (foldl - 0 (map (λ (expr) (interp expr)) l))] ;; por ejemplo (list (num 2) (num 3) (num 4) ->
+          [(equal? - f) (aux-op - (reverse (map (λ (expr) (interp expr)) l)))] ;; por ejemplo (list (num 2) (num 3) (num 4) ->
           [(equal? * f) (foldl * 1 (map (λ (expr) (interp expr)) l))]    ;; es igual a  (list 2 3 4)
-          ;;[(equal? / f) (foldr / 0 (map (λ (expr) (interp expr)) l))]
+          [(equal? / f) (aux-op / (reverse (map (λ (expr) (interp expr)) l)))]
           [(equal? modulo f) (modulo (interp (first l)) (interp (second l)))]
           [(equal? expt f) (expt (interp (first l)) (interp (second l)))]
           [(equal? add1 f) (add1 (interp (first l)))]
@@ -39,6 +39,8 @@
     ))
 (define (interp-aux bind body)
   (if (empty? bind) body (interp-aux (cdr bind) (subst body (binding-id (car bind)) (binding-value (car bind))))))
+
+(define (aux-op op l) (if (empty? (cdr l)) (car l) (op (aux-op op (cdr l)) (car l))))
 
 
 ;;(foldr + 0 (map (λ (expr) (interp expr)) l))

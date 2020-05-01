@@ -1,7 +1,7 @@
 #lang plai
 ;; Definición del tipo Binding
 (define-type Binding
-  [binding (id symbol?) (value WAE?)])
+  [binding (id symbol?) (value CFWAE?)])
 
 ;; Definición del tipo CFWAE
 (define-type CFWAE

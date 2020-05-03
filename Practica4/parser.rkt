@@ -14,7 +14,6 @@
     [(number? sexp) (num sexp)]
     [(list? sexp)
      (case (car sexp)
-       ;[(if0) (if (equal? (parse (car (cdr sexp))) (num 0)) (parse (car (cdr (cdr sexp)))) (parse (car (cdr (cdr (cdr sexp))))))]
        [(if0) (if0 (parse (car (cdr sexp))) (parse (car (cdr (cdr sexp)))) (parse (car (cdr (cdr (cdr sexp))))))]
        [(+) (op + (for/list ((i (cdr sexp))) (parse i)))]
        [(-) (op - (for/list ((i (cdr sexp))) (parse i)))]
@@ -24,6 +23,7 @@
        [(expt) (op expt (list (parse (second sexp)) (parse (third sexp))))]
        [(add1) (op add1 (list (parse (second sexp)))) ]
        [(sub1) (op sub1 (list (parse (second sexp)))) ]
+       [(with) (with (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
        [(with*) (with* (for/list ((i (second sexp))) (binding (first i) (parse (second i)))) (parse (third sexp)))]
        [(fun) (fun (car (cdr sexp)) (parse (car (cdr (cdr sexp)))))] 
        [(app) (app (parse (car (cdr sexp))) (for/list ((i (car (cdr (cdr sexp))))) (parse i)))]

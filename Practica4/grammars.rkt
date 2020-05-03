@@ -9,7 +9,7 @@
   [num   (n number?)]
   [if0 (condicion CFWAE?) (then CFWAE?) (else CFWAE?)]
   [op    (f procedure?) (args (listof CFWAE?))]
-  ;[with  (bindings (listof binding?)) (body CFWAE?)]
+  [with  (bindings (listof binding?)) (body CFWAE?)]
   [with* (bindings (listof binding?)) (body CFWAE?)]
   [fun (params (listof symbol?)) (body CFWAE?)]
   [app (fun CFWAE?) (args (listof CFWAE?))])
@@ -20,7 +20,8 @@
 (define-type CFWAE-Value
   [closure (param (listof symbol?)) (body CFWAE?) (env DefrdSub?)]
   [numV(n number?)])
-
+;Ejemplo de Uso:
+;(closure '(x y z) (num 0) (mtSub))
 
 ;; Data-type que representa un caché de sustituciones
 (define-type DefrdSub

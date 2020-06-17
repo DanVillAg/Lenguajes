@@ -16,12 +16,16 @@
     [(list? sexp)
      (case (car sexp)
        [(if) (iFS (parse (car (cdr sexp))) (parse (car (cdr (cdr sexp)))) (parse (car (cdr (cdr (cdr sexp))))))]
+       [(or)  (if (aux-or (cdr sexp) #f) (parse #t) (parse #f))]
+       [(and) (if (aux-and (cdr sexp) #t) (parse #t) (parse #f))]
        [(+) (opS + (for/list ((i (cdr sexp))) (parse i)))]
        [(-) (opS - (for/list ((i (cdr sexp))) (parse i)))]
        [(*) (opS * (for/list ((i (cdr sexp))) (parse i)))]
        [(/) (opS / (for/list ((i (cdr sexp))) (parse i)))]
        [(>) (opS > (for/list ((i (cdr sexp))) (parse i)))]
        [(<) (opS < (for/list ((i (cdr sexp))) (parse i)))]
+       [(>=) (opS >= (for/list ((i (cdr sexp))) (parse i)))]
+       [(<=) (opS <= (for/list ((i (cdr sexp))) (parse i)))]
        [(=) (opS = (for/list ((i (cdr sexp))) (parse i)))]
        [(modulo) (opS modulo (list (parse (second sexp)) (parse (third sexp))))]
        [(expt) (opS expt (list (parse (second sexp)) (parse (third sexp))))]
@@ -36,3 +40,9 @@
        )]
 
   ))
+
+(define (aux-or l b)
+   (if (empty? l) b (if (boolean? (car l)) (aux-or (cdr l) (or (car l) b)) (aux-or (cdr (car l)) b))))
+(define (aux-and l b)
+   (if (empty? l) b (if (boolean? (car l)) (aux-and (cdr l) (and (car l) b)) (aux-and (cdr (car l)) b)))) 
+ 

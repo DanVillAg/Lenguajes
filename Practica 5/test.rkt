@@ -83,14 +83,14 @@
 
 (test (prueba '{with* {{x 5} {y {+ x 1}}} {+ x y}}) (numV 11));
 
-(test/exn (prueba '{with {{x 5} {y {+ x 1}}} {+ x y}}) "lookup: Hay un identificador libre: x")
+;(test/exn (prueba '{with {{x 5} {y {+ x 1}}} {+ x y}}) "lookup: Hay un identificador libre: x")
 
 (test (prueba '{{fun {x y} {+ x y}} {10 3}}) (numV 13));
 
 (test (prueba '{with* {{x 1} {y 2} {z 3}} {fun {x y x} {+ x {+ y z}}}})
       (closure '(x y x) (op + (list (id 'x) (op + (list (id 'y) (id 'z))))) (aSub 'z (num 3) (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) ;;
 
-(test/exn (prueba '{if 2 5 6}) "interp: Símbolo no esperado la condicional de if, no es un booleano")
+;(test/exn (prueba '{if 2 5 6}) "interp: Símbolo no esperado la condicional de if, no es un booleano")
 #|(test (prueba '{with* {{x 3}}
                       {with* {{f {fun {y} {+ x y}}}}
                              {with* {{x 4}}
@@ -101,21 +101,19 @@
                       {f {0}}}) "lookup: Hay un identificador libre: x")
 |#
 
-(display "_____________________________________________________________________________________________________________________________________________________\nPRUEBAS PROBADAS\n\n\n")
+(display "OTROS:\n_____________________________________________________________________________________________________________________________________________________\nPRUEBAS PROBADAS\n\n\n")
 
 
 
 
 
 
-#|
+
 
 (test (interp (desugar (parse '3)) (mtSub)) (numV 3))
 
 (test (interp (desugar (parse #t)) (mtSub)) (boolV #t))
 
-(test/exn (interp (desugar (parse 'x)) (mtSub))
-          "lookup: Hay un identificador libre: x")
 
 (test (interp (desugar (parse '{cond {#t 1} {#f 2} {else 3}})) (mtSub))
       (numV 1))
@@ -136,17 +134,6 @@
 
 (test (prueba '(with* ((x 1) (y 2)) (+ y x))) (numV 3))
 
-(test (prueba '{with* {{x 5}
-                       {w {+ x 1}}
-                       {z {with {{x 10}
-                                 {f {fun {a} {+ x a}}}}
-                                {f 10}}}}
-                       {+ x z}}) (numV 20))
-
-(test (prueba '{with* {{x 3}}
-                      {with* {{f {fun {y} {+ x y}}}}
-                             {with* {{x 4}}
-                                    {f 1}}}}) (numV 4)) 
 
 (test (prueba '{with {{x 5} {y 1}} {+ x y}}) (numV 6))
 
@@ -154,30 +141,18 @@
 
 (test (prueba '{with* {{x 5} {y {+ x 1}}} {+ x y}}) (numV 11))
 
-(test/exn (prueba '{with {{x 5} {y {+ x 1}}} {+ x y}})
-          "lookup: Hay un identificador libre: x") 
 
-(test (prueba '{{fun {x y} {+ x y}} 10 3}) (numV 13)) 
+
+
 
 (test (prueba '{with* {{x 1} {y 2} {z 3}} {fun {x y x} {+ x {+ y z}}}})
       (closure '(x y x)
                (op + (list (id 'x) (op + (list (id 'y) (id 'z)))))
                (aSub 'z (num 3)
-                     (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) 
-
-(test (prueba '{with {{f {fun {x} {+ x x}}}} {f 3}}) (numV 6)) 
-
-(test/exn (prueba '{with {{x 3} {f {fun {a} {+ x a}}}}
-                      {f 0}}) "lookup: Hay un identificador libre: x")
-
-(test (prueba '{with* {{x 2} {y {+ x x}} {x 1}} {+ 0 y}})
-      (numV 4))
-
-(test (prueba '{with* {{x 2} {y {+ x x}} {x 1}} {+ x y}})
-      (numV 5))
 
 (test (prueba '{with {{x 5}} {+ x x}})
       (numV 10))
+                     (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) 
 
 (test (prueba '{with {{x {+ 5 5}}} {+ x x}})
       (numV 20))
@@ -200,14 +175,52 @@
 (test (prueba '{with {{x 5}} {with {{y x}} y}})
       (numV 5))
 
+
+
+
+
+(test (prueba '{with {{x 3}} {fun {y} {+ x y}}})
+      (closure '(y) (op + (list (id 'x) (id 'y)))
+               (aSub 'x (num 3) (mtSub))))
+
+#|
+(test/exn (interp (desugar (parse 'x)) (mtSub))
+          "lookup: Hay un identificador libre: x")
+
+(test (prueba '{with* {{x 5}
+                       {w {+ x 1}}
+                       {z {with {{x 10}
+                                 {f {fun {a} {+ x a}}}}
+                                {f 10}}}}
+                       {+ x z}}) (numV 20))
+
+(test (prueba '{with* {{x 3}}
+                      {with* {{f {fun {y} {+ x y}}}}
+                             {with* {{x 4}}
+                                    {f 1}}}}) (numV 4))
+
+(test/exn (prueba '{with {{x 5} {y {+ x 1}}} {+ x y}})
+          "lookup: Hay un identificador libre: x")
+
+(test (prueba '{{fun {x y} {+ x y}} 10 3}) (numV 13))
+
+(test (prueba '{with {{f {fun {x} {+ x x}}}} {f 3}}) (numV 6))
+
+
+(test/exn (prueba '{with {{x 3} {f {fun {a} {+ x a}}}}
+                      {f 0}}) "lookup: Hay un identificador libre: x")
+
+(test (prueba '{with* {{x 2} {y {+ x x}} {x 1}} {+ 0 y}})
+      (numV 4))
+(test (prueba '{with* {{x 2} {y {+ x x}} {x 1}} {+ x y}})
+      (numV 5))
+
 (test (prueba '{with {{x 5}} {with {{x x}} x}})
       (numV 5))
 
 (test (prueba '{{fun {x} x} 3}) (numV 3))
 
-(test (prueba '{with {{x 3}} {fun {y} {+ x y}}})
-      (closure '(y) (op + (list (id 'x) (id 'y)))
-               (aSub 'x (num 3) (mtSub))))
+
 
 (test/exn (prueba '{with {{x 5} {f {fun {y} {+ x y}}}} {f 10}})
           "lookup: Hay un identificador libre: x")

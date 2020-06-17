@@ -38,6 +38,8 @@
           [(equal? / f) (numV (aux-op / (reverse (map (λ (expr) (numV-n (interp expr ds))) l))))]
           [(equal? > f) (boolV (> (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
           [(equal? < f) (boolV (< (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
+          [(equal? >= f) (boolV (>= (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
+          [(equal? <= f) (boolV (<= (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
           [(equal? = f) (boolV (= (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
           [(equal? modulo f) (numV (modulo (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]
           [(equal? expt f) (numV (expt (numV-n (interp (first l) ds)) (numV-n (interp (second l) ds))))]

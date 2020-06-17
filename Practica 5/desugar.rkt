@@ -14,7 +14,7 @@
     [idS (i) (id i)]
     [numS (n) (num n)]
     [boolS (b) (bool b)]
-    [iFS (condition then else) (iF condition then else)]
+    [iFS (condition then else) (iF (desugar condition) (desugar then) (desugar else))]
     [opS (f l) (op f  (for/list ((i l)) (desugar i)))]
     [condS (cases) (toIF cases)]
     [withS (bind body) (app (fun (get-params bind) (desugar body))  (for/list ((i (get-args bind))) (desugar i))  )]

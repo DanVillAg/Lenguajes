@@ -47,48 +47,48 @@
 
 ;Pruebas interp
 (display "PRUEBAS INTERP\n______________________________________________________________________________________________________________________________\n\n")
-(test (prueba '{cond {{< 2 3} 1} {{> 10 2} 2} {else 3}}) (numV 1))
+(test (prueba '{cond {{< 2 3} 1} {{> 10 2} 2} {else 3}}) (numV 1));;
 
-(test (prueba '{cond {{= 2 3} 1} {{> 10 2} 2} {else 3}}) (numV 2))
+(test (prueba '{cond {{= 2 3} 1} {{> 10 2} 2} {else 3}}) (numV 2));;
 
-(test (prueba '{cond {#f 1} {#f 2} {else 3}}) (numV 3))
+(test (prueba '{cond {#f 1} {#f 2} {else 3}}) (numV 3)) ;;
 
-(test (prueba '3) (numV 3))
+(test (prueba '3) (numV 3)) ;;
 
-(test (prueba '#t) (boolV #t))
+(test (prueba '#t) (boolV #t)) ;;
 
-(test (prueba'{not #t}) (boolV #f))
+(test (prueba'{not #t}) (boolV #f));;
 
-(test (prueba'{not #f}) (boolV #t))
+(test (prueba'{not #f}) (boolV #t));;
 
-(test (prueba '{< 2 3}) (boolV #t))
+(test (prueba '{< 2 3}) (boolV #t));;
 
-(test (prueba '{< 3 2}) (boolV #f))
+(test (prueba '{< 3 2}) (boolV #f));;
 
-(test (prueba '{> 2 3}) (boolV #f))
+(test (prueba '{> 2 3}) (boolV #f));;
 
-(test (prueba '(if {not #t} 1 3)) (numV 3))
+(test (prueba '(if {not #t} 1 3)) (numV 3));;
 
-(test (prueba '(if {not {< 4 3}} 1 3)) (numV 1))
+(test (prueba '(if {not {< 4 3}} 1 3)) (numV 1));;
 
-(test (prueba '(cond {{not {< 4 3}} 1} {#f 2} {else 3})) (numV 1))
+(test (prueba '(cond {{not {< 4 3}} 1} {#f 2} {else 3})) (numV 1));;
 
-(test (prueba '(cond {{not {< 2 3}} 1} {(< 3 4) 2} {else 3})) (numV 2))
+(test (prueba '(cond {{not {< 2 3}} 1} {(< 3 4) 2} {else 3})) (numV 2));;
 
-(test (prueba '{with {{x 5} {y 1}} {+ x y}}) (numV 6))
+(test (prueba '{with {{x 5} {y 1}} {+ x y}}) (numV 6));
 
-(test (prueba '{with* {{x 5} {y x}} {+ x y}}) (numV 10))
+(test (prueba '{with* {{x 5} {y x}} {+ x y}}) (numV 10));
 
-(test (prueba'{with {{x 5} {y 1}} {with {{z {+ x y 12}}} {+ z 0}}}) (numV 18))
+(test (prueba'{with {{x 5} {y 1}} {with {{z {+ x y 12}}} {+ z 0}}}) (numV 18));
 
-(test (prueba '{with* {{x 5} {y {+ x 1}}} {+ x y}}) (numV 11))
+(test (prueba '{with* {{x 5} {y {+ x 1}}} {+ x y}}) (numV 11));
 
 (test/exn (prueba '{with {{x 5} {y {+ x 1}}} {+ x y}}) "lookup: Hay un identificador libre: x")
 
-(test (prueba '{{fun {x y} {+ x y}} {10 3}}) (numV 13)) 
+(test (prueba '{{fun {x y} {+ x y}} {10 3}}) (numV 13));
 
 (test (prueba '{with* {{x 1} {y 2} {z 3}} {fun {x y x} {+ x {+ y z}}}})
-      (closure '(x y x) (op + (list (id 'x) (op + (list (id 'y) (id 'z))))) (aSub 'z (num 3) (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) 
+      (closure '(x y x) (op + (list (id 'x) (op + (list (id 'y) (id 'z))))) (aSub 'z (num 3) (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) ;;
 
 (test/exn (prueba '{if 2 5 6}) "interp: Símbolo no esperado la condicional de if, no es un booleano")
 #|(test (prueba '{with* {{x 3}}

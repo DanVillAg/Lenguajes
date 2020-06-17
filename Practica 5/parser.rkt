@@ -22,6 +22,7 @@
        [(/) (opS / (for/list ((i (cdr sexp))) (parse i)))]
        [(>) (opS > (for/list ((i (cdr sexp))) (parse i)))]
        [(<) (opS < (for/list ((i (cdr sexp))) (parse i)))]
+       [(=) (opS = (for/list ((i (cdr sexp))) (parse i)))]
        [(modulo) (opS modulo (list (parse (second sexp)) (parse (third sexp))))]
        [(expt) (opS expt (list (parse (second sexp)) (parse (third sexp))))]
        [(add1) (opS add1 (list (parse (second sexp)))) ]

@@ -27,7 +27,7 @@
     [condS  (cases) (if (toType cases #t) (getType cases) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))]
     [withS  (bindings body) 1]
     [withS*  (bindings body) 1]
-    [funS (params type body) (params body)]
+    [funS (params type body) (funT (append (for/list ((i params)) (param-tipo i)) (list type)))]
     [appS (foo args) 1]
     ))
 

@@ -11,7 +11,7 @@
     [idS (i) 1]
     [numS (n) (numberT)]
     [boolS (b) (booleanT)]
-    [iFS (condicion then else) (if (equal? (typeof condition (phi)) booleanT) (1) (error "typeof: Error in parameter condition\n Expected type: (booleanT)\nGiven type: " (typeof condition (phi)) ))]
+    [iFS (condition then else) (if (equal? (typeof condition (phi)) (booleanT)) (if (equal? (typeof then (phi)) (typeof else (phi)))  (typeof then (phi)) (error "typeof: Type error\nconditionals must have same type in then-expr and else-expr") ) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)" (typeof condition (phi)) ))]
     [opS (f l)
          (cond 
           [(equal? + f) (if (all (for/list ((i l)) (numberT? (typeof i (phi) )))) (numberT) (error "typeof: Error in parameter (boolS #f)\n Expected type: (numberT)\nGiven type: (booleanT)"))]
@@ -24,12 +24,35 @@
           [(equal? >= f) (if (all (for/list ((i l)) (numberT? (typeof i (phi) )))) (booleanT) (error "typeof: Error in parameter (numS 1)\nExpected type: (booleanT)\nGiven type: (numberT)"))]
           [(equal? not f) (if (all (for/list ((i l)) (booleanT? (typeof i (phi) )))) (booleanT) (error ""))]
          )]
-    [condS  (cases) 1]
+    [condS  (cases) (if (toType cases #t) (getType cases) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))]
     [withS  (bindings body) 1]
     [withS*  (bindings body) 1]
     [funS (params type body) (params body)]
     [appS (foo args) 1]
     ))
+
+;;(prueba '{fun {{x : number 3} {y : boolean #f}} : number {if y x 0}})
+;;(parse'{fun {{x : number 3} {y : boolean #f}} : number {if y x 0}})
+
+(define (toType cases b)
+  (let ([c (car cases)]) 
+  (if (condition? c) (if  (equal? (typeof (condition-test-expr c) (phi)) (booleanT)) (toType (cdr cases) #t)  (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))
+  b)))
+
+(define (getType cases)
+  (let ([c (car cases)])
+    (checkConditions (cdr cases) (typeof (condition-then-expr c) (phi)))
+    )
+  )
+
+(define (checkConditions cases type)
+  (let ([c (car cases)])
+    (cond
+      [(condition? c) (if  (equal? (typeof (condition-then-expr c) (phi)) type) (checkConditions (cdr cases) type)  (error "typeof: Type error\nconditionals must have same type in then-expr and else-expr"))]
+      [(else-cond? c) (if  (equal? (typeof (else-cond-else-expr c) (phi)) type) type  (error "typeof: Type error\nconditionals must have same type in then-expr and else-expr"))]
+      )
+))
+
 
 (define (all lst)
   (if (equal? lst '())  

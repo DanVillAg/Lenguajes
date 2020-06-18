@@ -1,0 +1,1 @@
+("7.7" racket ("07390f17190d83877b9ccf5cd68ad5ec757d25a3" . "1215e4d9bad5295914b6f86c36219fb24a46fe37") #"/home/mutska/Documents/Desktop/Lenguajes/Practica4/./grammars.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"plai" #"lang" #"reader.rkt") (collects #"plai" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

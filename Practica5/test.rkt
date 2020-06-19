@@ -90,12 +90,14 @@
 (test (prueba '{with* {{x 1} {y 2} {z 3}} {fun {x y x} {+ x {+ y z}}}})
       (closure '(x y x) (op + (list (id 'x) (op + (list (id 'y) (id 'z))))) (aSub 'z (num 3) (aSub 'y (num 2) (aSub 'x (num 1) (mtSub)))))) ;;
 
-;(test/exn (prueba '{if 2 5 6}) "interp: Símbolo no esperado la condicional de if, no es un booleano")
+(test/exn (prueba '{if 2 5 6}) "interp: Símbolo no esperado la condicional de if, no es un booleano")
+
+(test (prueba '{with {{f {fun {x} {+ x x}}}} {f {3}}}) (numV 6))
+
 #|(test (prueba '{with* {{x 3}}
                       {with* {{f {fun {y} {+ x y}}}}
                              {with* {{x 4}}
                                     {f {1}}}}}) (numV 4))
-(test (prueba '{with {{f {fun {x} {+ x x}}}} {f {3}}}) (numV 6))
 
 (test (prueba '{with {{x 3} {f {fun {a} {+ x a}}}}
                       {f {0}}}) "lookup: Hay un identificador libre: x")
@@ -204,6 +206,9 @@
                                 {f 10}}}}
                        {+ x z}}) (numV 20))
 
+|#
+
+#|
 (test (prueba '{with* {{x 3}}
                       {with* {{f {fun {y} {+ x y}}}}
                              {with* {{x 4}}

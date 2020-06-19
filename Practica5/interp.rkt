@@ -34,9 +34,9 @@
             (error "interp: Símbolo no esperado la condicional de if, no es un booleano"))
          ]
     [op (f l)
-        (cond 
-          [(equal? anD f) (if (allSameType boolV? l) (boolV (foldr myAnd #t (map (λ (expr) (boolV-b (interp expr ds))) l))) (error "interp: Los argumentos no son de un mismo tipo de dato"))]
-          [(equal? oR f)  (if (allSameType boolV? l) (boolV (foldr myOr #t (map (λ (expr) (boolV-b (interp expr ds))) l))) (error "interp: Los argumentos no son de un mismo tipo de dato"))]
+        (cond
+          [(equal? anD f) (boolV (foldr myAnd #t (map (λ (expr) (boolV-b (interp expr ds))) l)))]
+          [(equal? oR f)  (boolV (foldr myOr #f  (map (λ (expr) (boolV-b (interp expr ds))) l))) ] 
           [(equal? + f) (numV (foldr + 0 (map (λ (expr) (numV-n (interp expr ds))) l)))] 
           [(equal? - f) (numV (aux-op - (reverse (map (λ (expr) (numV-n (interp expr ds))) l))))] 
           [(equal? * f) (numV (foldl * 1 (map (λ (expr) (numV-n (interp expr ds))) l)))]   
@@ -69,7 +69,7 @@
   )
 
 (define (allSameType typeProcedure list)
-  (if (empty? list) #t (if (typeProcedure (car list)) (allSameType typeProcedure (cdr list)) #f) )
+  (if (empty? list) #t (if (typeProcedure (car list)) (allSameType typeProcedure (cdr list)) (error "interp: Los argumentos no son de un mismo tipo de dato")) )
   )
 
 ;;(foldr myOr #f (map (λ (expr) expr) '(#t #t #f ) ))

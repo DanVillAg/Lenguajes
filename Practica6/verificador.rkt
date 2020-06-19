@@ -37,9 +37,8 @@
 ;; (error 'typeof (string-append "Error in funT type\nExpected type:" (~v(funcion-que-devuelde-el-tipo)) "\nGiven type:" (~v(funcion-que-devuelde-el-tipo)) ))
 
 (define (addContext params existing-context)
-  (let ([c (car params)])
-  (if (empty? params) existing-context (addContext (cdr params) (gamma (param-param c) (param-tipo c) existing-context)) )
-  ))
+  (if (empty? params) existing-context (addContext (cdr params) (gamma (param-param (car params)) (param-tipo (car params)) existing-context)) )
+  )
 
 
 ;;CON ESTE LOOKUP TODAS LAS FUNCIONES QUE REVISAN EL TYPEOF LLEVAN EL CONTEXTO GLOBAL, ESO HACE AL VERIFICADOR DE EVALUACIÓN DINÁMICA

@@ -25,13 +25,22 @@
           [(equal? not f) (if (all (for/list ((i l)) (booleanT? (typeof i context )))) (booleanT) (error ""))]
          )]
     [condS  (cases) (if (toType cases #t context) (getType cases context) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))]
-    [withS  (bindings body) 1]
-    [withS*  (bindings body) 1]
+    [withS  (bindings body)
+            (let ([next-context (addWithContext bindings context)])
+              (typeof body next-context)
+              )]
+    [withS*  (bindings body) (let ([next-context (addWithContext bindings context)])
+              (typeof body next-context)
+              )]
     [funS (params type body)
           (let ([next-context (addContext params context)])
           (if (equal? type (typeof body next-context)) (funT (append (for/list ((i params)) (param-tipo i)) (list type))) (error 'typeof (string-append "Error in funT type\nExpected type:" (~v(type)) "\nGiven type:" (~v(typeof body next-context)) )) ))] ;; (funT (append (for/list ((i params)) (param-tipo i)) (list type)))]
     [appS (foo args) (if (check-real-args (funS-params foo) args context) (car (reverse (funT-params (typeof foo context)) )) (error "app: Type error:\nParameter's type doesn't match expected types\nGiven: (numberT)\nExpected: (booleanT)") )]
     ))
+
+(define (addWithContext binding existing-context)
+  (if (empty? binding) existing-context (addWithContext (cdr binding) (gamma (binding-id (car binding)) (binding-tipo (car binding)) existing-context)) )
+  )
 
 (define (check-real-args params args context)
   (let ([expected (for/list ((i params)) (param-tipo i))] [given (for/list ((i args)) (typeof i context))])
@@ -43,8 +52,6 @@
 (define (addContext params existing-context)
   (if (empty? params) existing-context (addContext (cdr params) (gamma (param-param (car params)) (param-tipo (car params)) existing-context)) )
   )
-
-;;(check-reals-args (list (param 'x (numberT)) (param 'y (booleanT))) (list (numS 2) (boolS #t)) (phi))
 
 ;;CON ESTE LOOKUP TODAS LAS FUNCIONES QUE REVISAN EL TYPEOF LLEVAN EL CONTEXTO GLOBAL, ESO HACE AL VERIFICADOR DE EVALUACIÓN DINÁMICA
 ;; Busca el identificador "name" en el contexto 

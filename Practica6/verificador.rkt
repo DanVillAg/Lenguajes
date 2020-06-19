@@ -30,11 +30,16 @@
     [condS  (cases) (if (toType cases #t context) (getType cases context) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))]
     [withS  (bindings body)
             (let ([next-context (addWithContext bindings context)])
+              (if (all (for/list ((i bindings)) (equal? (typeof (binding-value i) context ) (binding-tipo i))))
               (typeof body next-context)
-              )]
-    [withS*  (bindings body) (let ([next-context (addWithContext bindings context)])
+              (error "typeof: Type error\ngiven value must have same type as with declaration" )
+              ))]
+    [withS*  (bindings body)
+             (let ([next-context (addWithContext bindings context)])
+              (if (all (for/list ((i bindings)) (equal? (typeof (binding-value i) context ) (binding-tipo i))))
               (typeof body next-context)
-              )]
+              (error "typeof: Type error\ngiven value must have same type as with declaration" )
+              ))]
     [funS (params type body)
           (let ([next-context (addContext params context)])
           (if (equal? type (typeof body next-context)) (funT (append (for/list ((i params)) (param-tipo i)) (list type))) (error 'typeof (string-append "Error in funT type\nExpected type:" (~v(type)) "\nGiven type:" (~v(typeof body next-context)) )) ))] ;; (funT (append (for/list ((i params)) (param-tipo i)) (list type)))]

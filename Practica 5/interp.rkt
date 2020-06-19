@@ -31,7 +31,9 @@
              (interp then ds)
              (interp else ds))]
     [op (f l)
-        (cond 
+        (cond
+          [(equal? anD f) (boolV (foldr myAnd #t (map (λ (expr) (boolV-b (interp expr ds))) l)))]
+          [(equal? oR f)  (boolV (foldr myOr #f  (map (λ (expr) (boolV-b (interp expr ds))) l))) ] 
           [(equal? + f) (numV (foldr + 0 (map (λ (expr) (numV-n (interp expr ds))) l)))] 
           [(equal? - f) (numV (aux-op - (reverse (map (λ (expr) (numV-n (interp expr ds))) l))))] 
           [(equal? * f) (numV (foldl * 1 (map (λ (expr) (numV-n (interp expr ds))) l)))]   
@@ -46,11 +48,25 @@
           [(equal? add1 f) (numV (add1 (numV-n (interp (first l) ds))))]
           [(equal? sub1 f) (numV (sub1 (numV-n (interp (first l) ds))))]
           [(equal? not f)  (boolV (not (boolV-b (interp (first l) ds))))]
+          [(equal? zero? f)  (boolV (zero? (numV-n (interp (first l) ds))))]
+          
           )]
     [fun (params body) (closure params body ds)]
     [app (foo args)  (interp (closure-body (interp foo ds )) (aux-env (closure-param (interp foo ds)) args (closure-env (interp foo ds))))]
     )
   )
+(define (mysum l r)
+  (+ l r)
+  )
+(define (myAnd l r)
+  (and l r)
+  )
+(define (myOr l r)
+  (or l r)
+  )
+;;(foldr myOr #f (map (λ (expr) expr) '(#t #t #f ) ))
+;;(foldr + 0 (map (λ (expr) expr) '(1 2 3 ) ))
+;;(foldr (and #t) + #t (map (λ (expr) expr) '(#t #f #t ) ))
  ;; (interp (closure-body (interp foo ds )) (aux-env (closure-param (interp foo ds)) args (closure-env (interp foo ds))))]
 
 ;Esta funcion crea el nuevo ambiente con los parametros de la funcion y la lista de argumentos que recibe la aplicacion de funcion

@@ -183,6 +183,15 @@
       (closure '(y) (op + (list (id 'x) (id 'y)))
                (aSub 'x (num 3) (mtSub))))
 
+
+(test (prueba '{or #f #f #f #f}) (boolV #f))
+
+(test (prueba '{or #f #f {or #t #f} #f}) (boolV #t))
+
+(test (prueba '(not (or #f #f (or #t #f) #f))) (boolV #f))
+
+(test (prueba '{and #t {or #t #f} #t}) (boolV #t))
+
 #|
 (test/exn (interp (desugar (parse 'x)) (mtSub))
           "lookup: Hay un identificador libre: x")
@@ -228,11 +237,5 @@
 (test/exn (prueba '{or #t #f #t 1})
           "interp: Los argumentos no son de un mismo tipo de dato")
 
-(test (prueba '{or #f #f #f #f}) (boolV #f))
 
-(test (prueba '{or #f #f {or #t #f} #f}) (boolV #t))
-
-(test (prueba '(not (or #f #f (or #t #f) #f))) (boolV #f))
-
-(test (prueba '{and #t {or #t #f} #t}) (boolV #t))
 |#

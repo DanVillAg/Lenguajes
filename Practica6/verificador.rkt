@@ -13,7 +13,9 @@
     [boolS (b) (booleanT)]
     [iFS (condition then else) (if (equal? (typeof condition context) (booleanT)) (if (equal? (typeof then context) (typeof else context))  (typeof then context) (error "typeof: Type error\nconditionals must have same type in then-expr and else-expr") ) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)" (typeof condition context) ))]
     [opS (f l)
-         (cond 
+         (cond
+          [(equal? anD f) (if (all (for/list ((i l)) (booleanT? (typeof i context )))) (booleanT) (error "typeof: Error in parameter (numS 1)\nExpected type: (booleanT)\nGiven type: (numberT)"))]
+          [(equal? oR f)  (if (all (for/list ((i l)) (booleanT? (typeof i context )))) (booleanT) (error "typeof: Error in parameter (numS 1)\nExpected type: (booleanT)\nGiven type: (numberT)"))]
           [(equal? + f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (numberT) (error "typeof: Error in parameter (boolS #f)\n Expected type: (numberT)\nGiven type: (booleanT)"))]
           [(equal? - f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (numberT) (error "typeof: Error in parameter (boolS #f)\n Expected type: (numberT)\nGiven type: (booleanT)"))]
           [(equal? * f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (numberT) (error "typeof: Error in parameter (boolS #f)\n Expected type: (numberT)\nGiven type: (booleanT)"))]
@@ -23,6 +25,7 @@
           [(equal? <= f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (booleanT) (error "typeof: Error in parameter (numS 1)\nExpected type: (booleanT)\nGiven type: (numberT)"))]
           [(equal? >= f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (booleanT) (error "typeof: Error in parameter (numS 1)\nExpected type: (booleanT)\nGiven type: (numberT)"))]
           [(equal? not f) (if (all (for/list ((i l)) (booleanT? (typeof i context )))) (booleanT) (error ""))]
+          [(equal? zero? f) (if (all (for/list ((i l)) (numberT? (typeof i context )))) (booleanT) (error ""))]
          )]
     [condS  (cases) (if (toType cases #t context) (getType cases context) (error "if: Type error\nConditional's type must be a boolean\nGiven: (numberT)"))]
     [withS  (bindings body)
